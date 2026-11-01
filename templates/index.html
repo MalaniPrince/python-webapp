@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daybook — Your DevOps task tracker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="{{ url_for('index') }}"><span class="brand-icon">d.</span> daybook</a>
+      <span class="environment"><span class="status-dot"></span> Your learning workspace</span>
+    </header>
+    <main>
+      <section class="intro">
+        <p class="eyebrow">SMALL STEPS. REAL PROGRESS.</p>
+        <h1>Make room for<br>what's next.</h1>
+        <p class="subtitle">A little structure for the things you're learning.<br>Add a task, get hands-on, and check it off.</p>
+      </section>
+      <section class="workspace" aria-label="Task workspace">
+        <div class="panel-heading"><div><p class="eyebrow">YOUR WORKSPACE</p><h2>The next steps</h2></div><span class="count">{{ total }} task{{ '' if total == 1 else 's' }}</span></div>
+        {% for category, message in get_flashed_messages(with_categories=true) %}<p class="notice {{ category }}" role="status">{{ message }}</p>{% endfor %}
+        <form class="add-form" method="post" action="{{ url_for('add_task') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <label class="sr-only" for="title">New task</label>
+          <input id="title" name="title" placeholder="What would you like to work on?" maxlength="160" required autocomplete="off">
+          <button class="primary" type="submit">Add task <span aria-hidden="true">↗</span></button>
+        </form>
+        <div class="list-toolbar"><nav aria-label="Filter tasks">{% for key, label in [('all', 'All tasks'), ('active', 'In progress'), ('done', 'Completed')] %}<a href="{{ url_for('index', filter=key) }}" class="filter {{ 'selected' if selected == key else '' }}" {% if selected == key %}aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}</nav><span class="progress-label">{{ done }} of {{ total }} completed</span></div>
+        <div class="task-list">
+          {% for task in tasks %}
+          <article class="task {{ 'completed' if task.completed else '' }}">
+            <form method="post" action="{{ url_for('toggle_task', task_id=task.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="check" type="submit" aria-label="{{ 'Reopen' if task.completed else 'Complete' }} task: {{ task.title }}">{% if task.completed %}<span aria-hidden="true">✓</span>{% endif %}</button>
+            </form>
+            <div class="task-text"><h3>{{ task.title }}</h3><p>{{ 'Completed' if task.completed else 'Ready when you are' }}</p></div>
+            <form method="post" action="{{ url_for('delete_task', task_id=task.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="delete" type="submit" aria-label="Delete task: {{ task.title }}">Delete</button></form>
+          </article>
+          {% else %}
+          <div class="empty"><span class="empty-icon" aria-hidden="true">↗</span><h3>{{ 'A fresh start.' if total == 0 else 'All clear here.' }}</h3><p>{{ 'Your next achievement starts with one small task.' if total == 0 else 'Try another filter or add something new to work on.' }}</p></div>
+          {% endfor %}
+        </div>
+        <div class="panel-footer"><span>Saved automatically · SQLite storage</span><span>One task at a time.</span></div>
+      </section>
+    </main>
+    <footer class="footer"><span>BUILT TO LEARN. MADE TO SHIP.</span><span>Python · Flask · Docker <span class="host">/ {{ hostname }}</span></span></footer>
+  </div>
+</body>
+</html>

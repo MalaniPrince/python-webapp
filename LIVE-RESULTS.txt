@@ -1,0 +1,6 @@
+Actual Docker app verification: 2026-11-01T05:46:04.380886+00:00
+GET /healthz -> HTTP 200: {"database": "connected", "hostname": "a88a95005b80", "status": "ok"}
+GET / -> HTTP 200, rendered task tracker HTML
+Existing task records reused; no duplicate starter tasks created.
+GET /api/tasks -> [{"completed": 1, "created_at": "2026-11-01T05:40:44Z", "id": 1, "title": "Build a Python app in WSL"}, {"completed": 0, "created_at": "2026-11-01T05:40:44Z", "id": 2, "title": "Deploy the image on the second laptop"}, {"completed": 0, "created_at": "2026-11-01T05:40:44Z", "id": 3, "title": "Verify persistent storage"}]
+Docker container restart -> task records persisted unchanged in the named volume.

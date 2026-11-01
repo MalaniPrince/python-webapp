@@ -1,0 +1,33 @@
+python-webapp-v1.tar.gz: OK
+python-webapp-k8s.yaml: OK
+python-webapp-deploy.sh: OK
+Kubernetes control plane is running at https://127.0.0.1:45093
+CoreDNS is running at https://127.0.0.1:45093/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+node/day2-control-plane condition met
+node/day2-worker condition met
+node/day2-worker2 condition met
+Loaded image: python-webapp:v1
+namespace/python-app unchanged
+persistentvolumeclaim/daybook-data unchanged
+deployment.apps/daybook unchanged
+service/daybook unchanged
+deployment "daybook" successfully rolled out
+NAME                           READY   STATUS    RESTARTS   AGE
+pod/daybook-56c6c67669-qvvkv   1/1     Running   0          2m14s
+
+NAME                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/daybook-data   Bound    pvc-4728489d-9bc6-4160-99ae-44dfa4995b32   1Gi        RWO            standard       <unset>                 3m2s
+
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/daybook   ClusterIP   10.96.210.108   <none>        80/TCP    3m2s
+
+Deployment ready. To open the application on this laptop, run:
+export KUBECONFIG=/root/devops-day2/kubeconfig
+kubectl --context kind-day2 -n python-app port-forward service/daybook 8090:80
+Then browse http://localhost:8090 on the second laptop.
+
+Image: "python-webapp:v1" with ID "sha256:f6e10e20286cc93a44afc51a754a188ea0fceb828a78fbca1470358c63bf1c6f" not yet present on node "day2-control-plane", loading...
+Image: "python-webapp:v1" with ID "sha256:f6e10e20286cc93a44afc51a754a188ea0fceb828a78fbca1470358c63bf1c6f" not yet present on node "day2-worker", loading...
+Image: "python-webapp:v1" with ID "sha256:f6e10e20286cc93a44afc51a754a188ea0fceb828a78fbca1470358c63bf1c6f" not yet present on node "day2-worker2", loading...

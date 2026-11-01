@@ -1,0 +1,60 @@
+namespace/python-app created
+persistentvolumeclaim/daybook-data created
+deployment.apps/daybook created
+service/daybook created
+Waiting for deployment "daybook" rollout to finish: 0 of 1 updated replicas are available...
+deployment "daybook" successfully rolled out
+NAME                           READY   STATUS    RESTARTS   AGE
+pod/daybook-77ff44799c-r2gm6   1/1     Running   0          9s
+
+NAME                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/daybook-data   Bound    pvc-4728489d-9bc6-4160-99ae-44dfa4995b32   1Gi        RWO            standard       <unset>                 9s
+
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/daybook   ClusterIP   10.96.210.108   <none>        80/TCP    9s
+
+Image: "python-webapp:v1" with ID "sha256:f6e10e20286cc93a44afc51a754a188ea0fceb828a78fbca1470358c63bf1c6f" not yet present on node "day2-control-plane", loading...
+Image: "python-webapp:v1" with ID "sha256:f6e10e20286cc93a44afc51a754a188ea0fceb828a78fbca1470358c63bf1c6f" not yet present on node "day2-worker", loading...
+Image: "python-webapp:v1" with ID "sha256:f6e10e20286cc93a44afc51a754a188ea0fceb828a78fbca1470358c63bf1c6f" not yet present on node "day2-worker2", loading...
+
+HTTP and Pod-replacement persistence test:
+Kubernetes GET /healthz -> 200 {"database":"connected","hostname":"daybook-77ff44799c-r2gm6","status":"ok"}
+Created task through Kubernetes Service: {"completed": 0, "created_at": "2026-11-01T05:42:07Z", "id": 1, "title": "Verify data survives a Kubernetes Pod replacement"}
+deployment.apps/daybook restarted
+Waiting for deployment "daybook" rollout to finish: 0 out of 1 new replicas have been updated...
+Waiting for deployment "daybook" rollout to finish: 0 out of 1 new replicas have been updated...
+Waiting for deployment "daybook" rollout to finish: 0 out of 1 new replicas have been updated...
+Waiting for deployment "daybook" rollout to finish: 0 of 1 updated replicas are available...
+deployment "daybook" successfully rolled out
+PASS: SQLite task persisted across Pod replacement using the persistent volume.
+Removed only the temporary persistence-test task.
+NAME                           READY   STATUS    RESTARTS   AGE
+pod/daybook-56c6c67669-qvvkv   1/1     Running   0          5s
+
+NAME                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/daybook-data   Bound    pvc-4728489d-9bc6-4160-99ae-44dfa4995b32   1Gi        RWO            standard       <unset>                 53s
+
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/daybook   ClusterIP   10.96.210.108   <none>        80/TCP    53s
+
+
+HTTP and Pod-replacement persistence test:
+Kubernetes GET /healthz -> 200 {"database":"connected","hostname":"daybook-56c6c67669-qvvkv","status":"ok"}
+Created task through Kubernetes Service: {"completed": 0, "created_at": "2026-11-01T05:46:08Z", "id": 2, "title": "Verify data survives a Kubernetes Pod replacement"}
+deployment.apps/daybook restarted
+Waiting for deployment "daybook" rollout to finish: 0 out of 1 new replicas have been updated...
+Waiting for deployment "daybook" rollout to finish: 0 out of 1 new replicas have been updated...
+Waiting for deployment "daybook" rollout to finish: 0 out of 1 new replicas have been updated...
+Waiting for deployment "daybook" rollout to finish: 0 of 1 updated replicas are available...
+deployment "daybook" successfully rolled out
+PASS: SQLite task persisted across Pod replacement using the persistent volume.
+Removed only the temporary persistence-test task.
+NAME                          READY   STATUS    RESTARTS   AGE
+pod/daybook-9c748b4c4-t5x7v   1/1     Running   0          5s
+
+NAME                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/daybook-data   Bound    pvc-4728489d-9bc6-4160-99ae-44dfa4995b32   1Gi        RWO            standard       <unset>                 4m54s
+
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/daybook   ClusterIP   10.96.210.108   <none>        80/TCP    4m54s
+
