@@ -27,6 +27,15 @@ Important files:
 - `k8s.yaml`: namespace, single-replica Deployment, Service, and persistent storage.
 - `tests/test_app.py`: behavior tests.
 
+For source editing with live reload and a database visible in this project, run:
+
+```powershell
+cd C:\Users\HP\Desktop\devops\python-webapp
+python dev.py
+```
+
+Open **http://localhost:8092**. This development mode uses `data/tasks.sqlite3`, independently of the Docker application's named volume. It starts with its own empty task list. See [database locations and development instructions](DATABASE-AND-DEVELOPMENT.md).
+
 You can run the tests from Windows PowerShell if pytest and Flask are installed:
 
 ```powershell
