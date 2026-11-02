@@ -44,6 +44,9 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
+              name: http
+            - containerPort: 9000
+              name: metrics
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

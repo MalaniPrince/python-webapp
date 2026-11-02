@@ -6,6 +6,7 @@ import sqlite3
 from pathlib import Path
 
 from flask import Flask, abort, flash, g, jsonify, redirect, render_template, request, session, url_for
+from metrics import install_metrics
 
 
 def create_app(config=None):
@@ -15,6 +16,7 @@ def create_app(config=None):
         MAX_CONTENT_LENGTH=16 * 1024,
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax",
+        METRICS_PORT=os.environ.get("APP_METRICS_PORT", "0"),
     )
     if config:
         app.config.update(config)
@@ -37,6 +39,8 @@ def create_app(config=None):
             completed INTEGER NOT NULL DEFAULT 0 CHECK(completed IN (0, 1)),
             created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
         )""")
+
+    install_metrics(app)
 
     def db():
         if "database" not in g:

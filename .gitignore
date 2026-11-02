@@ -6,3 +6,5 @@ data/
 *.tar
 *.tar.gz
 kubeconfig
+ops/runtime/
+ops/secrets/

@@ -3,6 +3,9 @@
 __pycache__
 .pytest_cache
 data
-tests
 *.tar
 *.tar.gz
+ops
+preview.png
+*.txt
+!requirements.txt
