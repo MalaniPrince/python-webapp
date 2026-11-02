@@ -1,4 +1,4 @@
-# Daybook: a real Python app you can deploy to the second laptop
+# Daybook: a real Python app you can deploy to the second laptop   for the testing of devops activity.
 
 A Flask task tracker with a responsive interface, SQLite persistence, and Gunicorn. Add tasks, complete/reopen them, filter them, and delete them. No Docker Hub account is needed for the transfer below.
 
