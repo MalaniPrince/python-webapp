@@ -1,0 +1,25 @@
+﻿name: Python App CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Run tests inside Docker
+        run: docker build --target test --tag python-webapp:test .
+
+      - name: Build release image
+        run: docker build --target release --tag python-webapp:ci .
