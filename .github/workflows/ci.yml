@@ -1,4 +1,4 @@
-﻿name: Python App CI
+name: Python App CI/CD
 
 on:
   push:
@@ -10,6 +10,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: daybook-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
@@ -17,9 +21,52 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Run tests inside Docker
         run: docker build --target test --tag python-webapp:test .
 
       - name: Build release image
-        run: docker build --target release --tag python-webapp:ci .
+        run: docker build --target release --tag "python-webapp:sha-${GITHUB_SHA}" .
+
+      - name: Package tested release
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: docker save --output "$RUNNER_TEMP/daybook-image.tar" "python-webapp:sha-${GITHUB_SHA}"
+
+      - name: Upload release for deployment
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: daybook-image
+          path: ${{ runner.temp }}/daybook-image.tar
+          retention-days: 3
+          compression-level: 0
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy to second laptop (kind-day2)
+    needs: test-and-build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && github.repository == 'MalaniPrince/python-webapp'
+    runs-on: [self-hosted, Linux, X64, day2-deploy]
+    timeout-minutes: 20
+    env:
+      KUBECONFIG: /home/priyanshu/.kube/config
+    steps:
+      - name: Check out tested code
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Download tested image
+        uses: actions/download-artifact@v4
+        with:
+          name: daybook-image
+          path: ${{ runner.temp }}/daybook-release
+
+      - name: Deploy and verify rollout
+        run: bash scripts/ci/deploy-day2.sh "$RUNNER_TEMP/daybook-release/daybook-image.tar"
+
+      - name: Remove downloaded image archive
+        if: always()
+        run: rm -f -- "$RUNNER_TEMP/daybook-release/daybook-image.tar"

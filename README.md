@@ -13,7 +13,10 @@ A Flask task tracker with a responsive interface, SQLite persistence, and Gunico
 
 Actual results are in `LIVE-RESULTS.txt` and `KUBERNETES-LIVE-RESULTS.txt`.
 
-**The second laptop deployment has not been executed by the assistant.** SSH reaches it, but this session has no working noninteractive login. Run the transfer below with your normal SSH password. Do not send your password into chat.
+The second laptop's `kind-day2` cluster is reachable over SSH. The existing
+`python-app/daybook` deployment and its database volume are healthy. See
+[automatic CI/CD deployment](CI-CD.md) for the GitHub Actions workflow and runner
+setup. The manual transfer instructions below remain available for initial setup.
 
 ## 1. View or modify the source on THIS laptop
 
